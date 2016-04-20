@@ -21,7 +21,7 @@ def populate_redis_with_bn_totals(gender=None):
                'WA','WV','WI','WY']
 
     print('Beginning pre-cache process - this dramatically improves search times for users when searching by region.')
-    sender = rmq_negotiator.RMQNegotiator("BabyNamesPrecache")
+    sender = rmq_negotiator.RMQNegotiator(message_queue="BabyNamesPrecache")
     messages = []
     for g in genders:
         for l in locales:

@@ -22,7 +22,7 @@ class RMQNegotiator:
         self.host = host
         self.port = port
         self.message_queue = message_queue
-
+        
 
     def list_queues(self):
         proc = subprocess.Popen("/usr/sbin/rabbitmqctl list_queues",
@@ -73,13 +73,16 @@ class RMQNegotiator:
         jobdata = body.decode("utf-8")
         job = json.loads(jobdata)
 
+        '''
+        This is where we are going to execute jobs based on which message queue is being monitored.
+        '''
         print("Executing: " + str(jobdata))
         if self.message_queue == "DemoQueue":
             DemoQueueWorker(job["ident"]).start()
             self.ack_job(ch, method)
             
         if self.message_queue == "BabyNamesPrecache":
-            BabyNamesPrecacheWorker(
+            BabyNamesWorker(
                 job["year"],
                 job["gender"],
                 job["locale"]
