@@ -52,7 +52,6 @@ def data():
         results["completed"] = 0
         
     results["queue_count"] = int(RMQNegotiator(message_queue="DemoQueue").queue_count())
-    print(results)
     return jsonify(results)
 
 

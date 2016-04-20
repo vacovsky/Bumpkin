@@ -2,7 +2,8 @@ import pika
 import CONFIG
 import time
 import json
-from worker import DemoWorker
+from babynames_worker import BabyNamesWorker
+from demoqueue_worker import DemoQueueWorker
 import subprocess
 
 
@@ -72,17 +73,19 @@ class RMQNegotiator:
         jobdata = body.decode("utf-8")
         job = json.loads(jobdata)
 
+        print("Executing: " + str(jobdata))
         if self.message_queue == "DemoQueue":
-            pass
+            DemoQueueWorker(job["ident"]).start()
+            self.ack_job(ch, method)
             
-        if self.message_queue ==  "BabyNamesPrecache":
-            DemoWorker(
+        if self.message_queue == "BabyNamesPrecache":
+            BabyNamesPrecacheWorker(
                 job["year"],
                 job["gender"],
                 job["locale"]
             ).start()
+            self.ack_job(ch, method)
         
-        self.ack_job(ch, method)
             
         
     def ack_job(self, ch, method):

@@ -23,7 +23,6 @@ def populate_redis_with_bn_totals(gender=None):
     print('Beginning pre-cache process - this dramatically improves search times for users when searching by region.')
     sender = rmq_negotiator.RMQNegotiator("BabyNamesPrecache")
     messages = []
-    #pcstart = datetime.now()
     for g in genders:
         for l in locales:
             for y in range(1879, 2015):
