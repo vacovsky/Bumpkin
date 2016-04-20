@@ -1,10 +1,10 @@
 import sqlite3
-import cachemanager
+from Redis import Redis
 import CONFIG
 from datetime import datetime
 import rmq_negotiator
 
-
+cachemanager = Redis()
 USE_SQLITE = True
 
 if USE_SQLITE:
@@ -54,20 +54,20 @@ def get_name_data_in_region(name, gender, locale, first_year=1950):
     year_totals = {}
     for y in range(first_year, 2015):
         cache_key = gender + ':' + locale + ':' + str(y)
-        total_gender_for_year = cachemanager.get_or_set_obj(cache_key)
+        total_gender_for_year = cachemanager.get_or_set(cache_key)
         if total_gender_for_year is None:
             total_gender_for_year = int(get_total_gender_for_year(y, gender, locale))
-            cachemanager.get_or_set_obj(cache_key, total_gender_for_year)
+            cachemanager.get_or_set(cache_key, total_gender_for_year)
         year_totals[y] = int(total_gender_for_year)
     return get_name_data(name, gender, locale, year_totals, first_year)
 
 
 def prepopulate_cache(year, gender, locale):
     cache_key = gender + ':' + locale + ':' + str(year)
-    total_gender_for_year = cachemanager.get_or_set_obj(cache_key)
+    total_gender_for_year = cachemanager.get_or_set(cache_key)
     if total_gender_for_year is None:
         total_gender_for_year = int(get_total_gender_for_year(year, gender, locale))
-        cachemanager.get_or_set_obj(cache_key, total_gender_for_year)
+        cachemanager.get_or_set(cache_key, total_gender_for_year)
 
     #print('Processing, %s : %s: %s please wait...' % (job['gender'], job['locale'], job['year']))
     print(cache_key, total_gender_for_year)

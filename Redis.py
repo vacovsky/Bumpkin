@@ -36,13 +36,13 @@ class Redis:
         self.PubSub.get_message()
 
         
-    def get_or_set(key, obj=None):
-        v = REDIS.Connection.get(key)
+    def get_or_set(self, key, obj=None):
+        v = self.Connection.get(key)
         if v is not None:
             return v.decode('utf8')
         else:
             if obj is not None:
-                REDIS.Connection.set(key, obj)
+                self.Connection.set(key, obj)
                 return
 
 if __name__ == '__main__':
