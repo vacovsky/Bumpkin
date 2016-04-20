@@ -22,7 +22,7 @@ class DemoHeartbeatDaemon:
     
     def __init__(self):
         self.R = Redis()
-        self.Messenger = RMQNegotiator("DemoQueue")
+        self.Messenger = RMQNegotiator(message_queue="DemoQueue")
         
     
     def runQuery(self, query=tuple, connstring=CONFIG.DB):
@@ -90,10 +90,5 @@ class DemoHeartbeatDaemon:
         self.R.subscribe(REQUEUE)
         
                                
-if __name__ == '__main__':
-    #r = Redis().Connection
-    #for i in r.smembers(RUNNING):
-    #    print(r.get(i))
-    #    r.srem(RUNNING, i)
-    
-    monitor = HeartbeatDaemon().monitor()
+if __name__ == '__main__':    
+    monitor = DemoHeartbeatDaemon().monitor()
