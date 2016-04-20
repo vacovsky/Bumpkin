@@ -54,7 +54,7 @@
         $scope.last_15m_fails = 0;
 
 
-        $scope.countDown = 15;
+        $scope.countDown = 50;
         $scope.checkData = function() {
             
             $http.get(app.Root + 'data')
@@ -80,7 +80,7 @@
                             $scope.countDown = $scope.countDown - 1;
                         }
 
-                        if ($scope.chartLabels.length > 50) {
+                        if ($scope.chartLabels.length > 70) {
                             $scope.chartData[5].shift();
                             $scope.chartData[4].shift();
                             $scope.chartData[3].shift();
@@ -91,7 +91,9 @@
                         }
                     }
                 }).error(function(data, status, headers, config) {});
-            
+            if ($scope.countDown == 0 && data.queue_count !== 0){
+                $scope.countDown = 50;
+            }
         };
         
         $scope.queue_jobs = function(jobs) {
