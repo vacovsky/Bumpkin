@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" ng-csp="" ng-app="babynames" ng-cloak="true">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Jobs Monitor</title>
+    <meta name="description" content="Error logs redone in AngularJS">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/x-icon" href="static/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="static/assets/style/style.css" />
+    <link rel="stylesheet" type="text/css" href="static/assets/css/superhero.css" />
+    <link rel="stylesheet" type="text/css" href="static/assets/css/angular-csp.css" />
+    <link rel="stylesheet" type="text/css" href="static/assets/css/angular-chart.css" />
+</head>
+
+<body style="width:100%;height:100%">
+  <div ng-controller="JobMonControl as jm">
+    <div style="margin-left:50px;margin-bottom:30px;margin-top:5px">
+      <h2 style="display:inline;margin-right:15px;" class="pull-left"><b>Jobs Monitor</b></h2>
+      <button style="display:inline;margin-left:25px;margin-top:19px;" type="button" ng-click="queue_jobs(1000)" class="btn btn-warning">Add 1000 Jobs</button>
+      <button style="display:inline;margin-left:25px;margin-top:19px;" type="button" ng-click="flushRedis()" class="btn btn-primary">Flush Redis</button>
+
+      <h4 style="display:inline;margin-right:15px;margin-top:27px;" class="pull-right "> Fail: {[ failed_count ]}% </h4>
+      <h4 style="display:inline;margin-right:15px;margin-top:27px;" class="pull-right "> Requeued: {[ requeued ]} &nbsp; | </h4>
+      <h4 style="display:inline;margin-right:15px;margin-top:27px;" class="pull-right "> Completed: {[ completed ]}&nbsp; | </h4>
+      <h4 style="display:inline;margin-right:15px;margin-top:27px;" class="pull-right "> Running: {[ running ]} &nbsp; | </h4>
+      <h4 style="display:inline;margin-right:15px;margin-top:27px;" class="pull-right "> Enqueued: {[ queue_count ]} &nbsp; | </h4>
+
+    </div>
+    <div id="chart" style="height:75%;width:85%;align:center;margin-left:auto;margin-right:auto">
+      <canvas
+         id="rightbox"
+         class="chart chart-line chart-xl ng-isolate-scope"
+         chart-legend="true"
+         chart-data="chartData"
+         chart-options="options"
+         chart-labels="chartLabels"
+         chart-series="chartSeries">
+      </canvas>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="static/assets/js/angular.min.js"></script>
+<script type="text/javascript" src="static/assets/js/Chart.js"></script>
+<script type="text/javascript" src="static/assets/js/angular-chart.js"></script>
+<script type="text/javascript" src="static/assets/js/angular-route.min.js"></script>
+<script type="text/javascript" src="static/assets/js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="static/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="static/assets/js/ui-bootstrap-tpls-0.14.1.min.js"></script>
+<script type="text/javascript" src="static/app/jobmon.js"></script>
+<script type="text/javascript" src="static/assets/js/moment.min.js"></script>
+<script type="text/javascript" src="static/assets/js/angular-cookies.min.js"></script>
+
+</html>
