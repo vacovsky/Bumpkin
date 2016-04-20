@@ -53,6 +53,7 @@
         $scope.queue_count = 0;
         $scope.last_15m_fails = 0;
 
+        $scope.addMessage = "";
 
         $scope.countDown = 50;
         $scope.checkData = function() {
@@ -98,7 +99,14 @@
         
         $scope.queue_jobs = function(jobs) {
             $http.get(app.Root + 'queue?count=' + jobs)
-                .success(function(data, status, headers, config) {})
+                .success(function(data, status, headers, config) {
+                    if (data.message !== undefined) {
+                        $scope.addMessage = data.message;                        
+                    }
+                    else {
+                        $scope.addMessage = undefined;
+                    }
+                })
                 .error(function(data, status, headers, config) {});
         };
 

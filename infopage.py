@@ -26,8 +26,14 @@ def flushall():
 
 @app.route('/queue', methods=["GET"])
 def queue():
-    result = {"success": True}
-    queue_demoqueue_jobs.queue_jobs()
+    if int(RMQNegotiator(message_queue="DemoQueue").queue_count()) < 19000:
+        result = {"success": True}
+        queue_demoqueue_jobs.queue_jobs()
+    else:
+        result = {
+            "success": False,
+            "message": "Sorry - we can't handle any more jobs right now.  Try when the queue is below 19000."
+        }
     return jsonify(result)
 
 

@@ -22,6 +22,7 @@
       <div style="margin-left:50px;margin-bottom:30px;margin-top:5px">
         <div style="display:inline;">
           <h2 style="display:inline;margin-right:15px;" class="pull-left"><b>Jobs Monitor</b></h2>
+          <h3  style="display:inline;margin-right:15px;" ng-show="addMessage !== undefined"  class="pull-left">{[ addMessage ]}</h3>
         </div>
         <div style="display:inline;">
           <button style="display:inline;margin-left:25px;margin-top:19px;" type="button" ng-click="queue_jobs(1000)" class="btn btn-warning">Add 1000 Jobs</button>
