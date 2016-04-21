@@ -6,10 +6,10 @@ import json
 import babynames_task
 
 
-RUNNING = "RUNNING"
-COMPLETE = "COMPLETE"
-FAILED = "FAILED"
-REQUEUE = "REQUEUE"
+RUNNING = "RUNNING:BABYNAMESCACHE"
+COMPLETE = "COMPLETE:BABYNAMESCACHE"
+FAILED = "FAILED:BABYNAMESCACHE"
+REQUEUE = "REQUEUE:BABYNAMESCACHE"
 
 '''
 This class executes jobs as they appear in the queue of jobs to execute.

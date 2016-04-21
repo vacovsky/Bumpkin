@@ -5,10 +5,10 @@ from random import randrange, randint
 import json
 
 
-RUNNING = "RUNNING"
-COMPLETE = "COMPLETE"
-FAILED = "FAILED"
-REQUEUE = "REQUEUE"
+RUNNING = "RUNNING:DEMO"
+COMPLETE = "COMPLETE:DEMO"
+FAILED = "FAILED:DEMO"
+REQUEUE = "REQUEUE:DEMO"
 
 '''
 This class executes jobs as they appear in the queue of jobs to execute.
