@@ -49,11 +49,11 @@ def data():
     results["last_15m_fails"] = DemoHeartbeatDaemon().runQuery(last15_q)[0][0]
     
     try:
-        results["failed_count"] = int(r.Connection.get("failed_count").decode('utf8'))
+        results["failed_count"] = int(r.Connection.get("FAILED:DEMO:COUNT").decode('utf8'))
     except:
         results["failed_count"] = 0
     try:
-        results["completed"] = int(r.Connection.get("COMPLETED:COUNT").decode('utf8'))
+        results["completed"] = int(r.Connection.get("COMPLETED:DEMO:COUNT").decode('utf8'))
     except:
         results["completed"] = 0
         

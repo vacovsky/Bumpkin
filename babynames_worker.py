@@ -75,11 +75,11 @@ class BabyNamesWorker:
         self.R.srem(RUNNING, self.data)
         self.R.srem(REQUEUE, self.data)
         self.R.sadd(COMPLETE, self.data)
-        c = self.R.get("COMPLETED:COUNT")
+        c = self.R.get("COMPLETED:BABYNAMESCACHE:COUNT")
         if c is not None:
-            self.R.set("COMPLETED:COUNT", int(c) + 1)
+            self.R.set("COMPLETED:BABYNAMESCACHE:COUNT", int(c) + 1)
         else:
-            self.R.set("COMPLETED:COUNT", 1)
+            self.R.set("COMPLETED:BABYNAMESCACHE:COUNT", 1)
         if str(self.json_obj) in self.R.smembers(REQUEUE):
             #fc = int(self.R.Connection.get("failed_count").decode('utf8'))
             #self.R.Connection.set("failed_count", fc - 1)

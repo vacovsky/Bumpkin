@@ -57,11 +57,11 @@ class DemoHeartbeatDaemon:
                     }
                 ])
             
-            if self.R.Connection.get("failed_count") is None:
-                self.R.Connection.set("failed_count", 1)
+            if self.R.Connection.get("FAILED:DEMO:COUNT") is None:
+                self.R.Connection.set("FAILED:DEMO:COUNT", 1)
             else:
-                fc = int(self.R.Connection.get("failed_count").decode('utf8'))
-                self.R.Connection.set("failed_count", fc + 1)
+                fc = int(self.R.Connection.get("FAILED:DEMO:COUNT").decode('utf8'))
+                self.R.Connection.set("FAILED:DEMO:COUNT", fc + 1)
 
 
     def hb_compare(self, last_updated):
