@@ -32,6 +32,7 @@ class DemoQueueWorker:
         
 
     def alive(self):
+        Redis().get_or_set("STARTTIME:DEMO:" + str(self.id), datetime.now())
         self.R.setex(
             str(self.id),
             30,
@@ -54,7 +55,7 @@ class DemoQueueWorker:
                 return False
             add_me = randrange(1, 11)
             self.counter += 1
-            time.sleep(.1)
+            time.sleep(randint(1, 10))
             self.total += add_me
             self.alive()
             
@@ -74,7 +75,7 @@ class DemoQueueWorker:
         if self.id in self.R.smembers(REQUEUE):
             self.R.srem(REQUEUE, self.id)
             self.R.set("COMPLETED:DEMO:COUNT", int(c) + 1)
-        
+        self.R.set("ENDTIME:DEMO:" + str(self.id), datetime.now())
  
 if __name__ == '__main__':
     DemoWorker().start()
