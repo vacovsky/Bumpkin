@@ -55,10 +55,9 @@ def queue():
 
 @app.route('/kpis', methods=["GET"])
 def kpis():
-    bucket = "DEMO"
-    queue = request.args.get('bucket') or "DEMO"
-    j = JobsRuntimeKPIRoller()
-    j.export_runtime_kpi(bucket)
+    bucket = request.args.get('bucket') or "DEMO"
+    j = JobsRuntimeKPIRoller(bucket)
+    j.export_runtime_kpi()
     return jsonify(j.results())
     
     

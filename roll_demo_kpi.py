@@ -29,7 +29,9 @@ class JobsRuntimeKPIRoller:
         for id in self.ids:
             time = self.id_time_dict[id]
             if time > (self.mean + (self.std * 2)):
-                self.rares.append({id:time})
+                self.rares.append({
+                    "id" : id,
+                    "seconds": time})
 
     
     def export_runtime_kpi(self, bucket):
@@ -62,6 +64,20 @@ class JobsRuntimeKPIRoller:
         #print(self.id_time_dict)
         print('Rares: ' + str(len(self.rares)))
         print('Rare %: ' +  str((len(self.rares) / self.total) * 100))
+
+        
+    def results(self):
+        return {
+            "total": self.total,
+            "max": self.max_run,
+            "mean": self.mean,
+            "median": self.median,
+            "media_grouped": self.median_grouped,
+            "standardDeviation": self.std,
+            "rareCount": len(self.rares),
+            "rarePercent": (len(self.rares) / self.total) * 100,
+            "rares": self.rares
+        }
 
 
 if __name__ == '__main__':

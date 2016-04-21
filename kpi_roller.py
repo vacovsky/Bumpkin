@@ -7,14 +7,15 @@ class JobsRuntimeKPIRoller:
     long_running = []
     
     
-    def __init__(self):
+    def __init__(self, bucket):
         self.R = Redis().Connection
+        self.bucket = bucket
         
 
 
-    def __run_secs(self, id, bucket):
-        start = "STARTTIME:" + str(bucket) + ":" + str(id)
-        end = "ENDTIME:" + str(bucket) + ":" + str(id)
+    def __run_secs(self, id):
+        start = "STARTTIME:" + str(self.bucket) + ":" + str(id)
+        end = "ENDTIME:" + str(self.bucket) + ":" + str(id)
         rs = self.R.get(start)
         re = self.R.get(end)
         if rs is not None and re is not None:
@@ -29,15 +30,18 @@ class JobsRuntimeKPIRoller:
         for id in self.ids:
             time = self.id_time_dict[id]
             if time > (self.mean + (self.std * 2)):
-                self.rares.append({id:time})
+                self.rares.append({
+                    "id": id,
+                    "seconds": time
+                })
 
     
-    def export_runtime_kpi(self, bucket):
+    def export_runtime_kpi(self):
         ids = []
         times = []
 
-        for v in self.R.smembers("COMPLETE:" + bucket):
-            times.append(self.__run_secs(v.decode('utf8'), bucket)) 
+        for v in self.R.smembers("COMPLETE:" + self.bucket):
+            times.append(self.__run_secs(v.decode('utf8'))) 
             ids.append(int(v.decode('utf8')))
 
         self.id_time_dict = dict(zip(ids, times))
@@ -53,6 +57,7 @@ class JobsRuntimeKPIRoller:
 
 
     def print_results(self):
+        print("Type: " + self.bucket)
         print('Max: ' + str(self.max_run))
         print('Total: ' + str(self.total))
         print('Mean: ' + str(self.mean))
