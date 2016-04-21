@@ -47,9 +47,9 @@ class DemoQueueWorker:
         
     def perform_task(self):
         while self.total <= 21:
-            if self.counter > 4:
+            if self.counter > 6:
                 self.counter = 0
-                print('Five hits and still didn\'t bust for ID: ' + str(self.id))
+                print('Seven hits and still didn\'t bust for ID: ' + str(self.id))
                 time.sleep(60)
                 return False
             add_me = randrange(1, 11)

@@ -22,7 +22,7 @@
             scaleShowHorizontalLines: true,
             scaleShowVerticalLines: false,
             datasetFill: true,
-            scaleOverride: true,
+            scaleOverride: false,
             scaleStartValue: 0,
             scaleStepWidth: .5,
             scaleSteps: 40,
@@ -62,6 +62,7 @@
             $scope.queue_selected = queue;
             $scope.chartData = [[], [], [], [], [], []];
             $scope.chartLabels = [];
+            $scope.countDown = 50;
             $scope.checkData();
         }
         
@@ -108,6 +109,7 @@
         };
         
         $scope.queue_jobs = function(jobs) {
+            $scope.countDown = 50;
             $http.get(app.Root + 'queue?queue=' + $scope.queue_selected)
                 .success(function(data, status, headers, config) {
                     if (data.message !== undefined) {
