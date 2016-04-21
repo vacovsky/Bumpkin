@@ -42,8 +42,8 @@ def data():
     r = Redis()
     results = {}
     
-    results["requeued"] = len(r.Connection.smembers('REQUEUE'))
-    results["running"] = len(r.Connection.smembers('RUNNING'))
+    results["requeued"] = len(r.Connection.smembers('REQUEUE:DEMO'))
+    results["running"] = len(r.Connection.smembers('RUNNING:DEMO'))
 
     last15_q = "SELECT Count(id) FROM failed WHERE timestamp > '%s'" % str(datetime.datetime.now() - datetime.timedelta(minutes=15))
     results["last_15m_fails"] = DemoHeartbeatDaemon().runQuery(last15_q)[0][0]
