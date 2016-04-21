@@ -60,7 +60,8 @@ class JobsRuntimeKPIRoller:
         print('Median grouped: ' + str(self.median_grouped))
         print('Standard Deviation: ' + str(self.std))
         #print(self.id_time_dict)
-        print('Rares: ' + str(self.rares))
+        print('Rares: ' + str(len(self.rares)))
+        print('Rare %: ' +  str((len(self.rares) / self.total) * 100))
 
 
 if __name__ == '__main__':
