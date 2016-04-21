@@ -8,9 +8,9 @@ RMQ_USER = 'rabbit'
 RMQ_PASS = 'bunnyrabbit!!'
 MESSAGE_QUEUE = 'nightlyscriptmockup'
 
-DBPATH = "database.sqlite"
+
+DBPATH = '/home/joe/Projects/babynames_python/database.sqlite'
 
 if socket.gethostname != "octo-pi":
     DBPATH = "/mnt/sd/Projects/Angular/babynames/database.sqlite"
-else:
-    DBPATH = '/home/joe/Projects/babynames_python/database.sqlite'
+    
