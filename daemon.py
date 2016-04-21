@@ -8,10 +8,10 @@ from rmq_negotiator import RMQNegotiator
 from dateutil import parser
 import json
 
-RUNNING = "RUNNING"
-COMPLETE = "COMPLETE"
-FAILED = "FAILED"
-REQUEUE = "REQUEUE"
+RUNNING = "RUNNING:DEMO"
+COMPLETE = "COMPLETE:DEMO"
+FAILED = "FAILED:DEMO"
+REQUEUE = "REQUEUE:DEMO"
 
 
 class DemoHeartbeatDaemon:
