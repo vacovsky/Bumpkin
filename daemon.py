@@ -78,7 +78,6 @@ class DemoHeartbeatDaemon:
             print("Count of running tasks: " + str(len(running)))
             for task in running:
                 if self.R.Connection.get(task) is None:
-                    # or (d is not None and self.hb_compare(d)):
                     self.R.Connection.sadd(FAILED, task)
                     self.R.Connection.srem(RUNNING, task)
                     

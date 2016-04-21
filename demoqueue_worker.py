@@ -46,16 +46,15 @@ class DemoQueueWorker:
         )
         
     def perform_task(self):
-        while self.total < 21:
+        while self.total <= 21:
             if self.counter > 4:
                 self.counter = 0
-                print('Hung Job: ' + str(self.id))
+                print('Five hits and still didn\'t bust for ID: ' + str(self.id))
                 time.sleep(60)
                 return False
-            add_me = randrange(0, 21)
+            add_me = randrange(1, 11)
             self.counter += 1
-            time.sleep(1)
-            #time.sleep(randint(1, 20))
+            time.sleep(.1)
             self.total += add_me
             self.alive()
             
@@ -66,7 +65,6 @@ class DemoQueueWorker:
     def cleanup(self):
         self.counter = 0
         self.R.srem(RUNNING, self.id)
-        self.R.srem(REQUEUE, self.id)
         self.R.sadd(COMPLETE, self.id)
         c = self.R.get("COMPLETED:DEMO:COUNT")
         if c is not None:
@@ -74,11 +72,8 @@ class DemoQueueWorker:
         else:
             self.R.set("COMPLETED:DEMO:COUNT", 1)
         if self.id in self.R.smembers(REQUEUE):
-            #fc = int(self.R.Connection.get("failed_count").decode('utf8'))
-            #self.R.Connection.set("failed_count", fc - 1)
             self.R.srem(REQUEUE, self.id)
             self.R.set("COMPLETED:DEMO:COUNT", int(c) + 1)
-            
         
  
 if __name__ == '__main__':

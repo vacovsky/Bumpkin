@@ -64,14 +64,12 @@ class BabyNamesWorker:
     def cleanup(self):
         self.counter = 0
 
-        self.data =  json.dumps(
-            {
-                "year": self.year,
-                "gender": self.gender,
-                "locale": self.locale
-            }
-        )
-        
+        self.data = {
+            "year": self.year,
+            "gender": self.gender,
+            "locale": self.locale
+        }
+
         self.R.srem(RUNNING, self.data)
         self.R.srem(REQUEUE, self.data)
         self.R.sadd(COMPLETE, self.data)
