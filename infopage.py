@@ -6,6 +6,7 @@ import time
 from Redis import Redis
 from daemon import DemoHeartbeatDaemon
 import queue_demoqueue_jobs
+import queue_babynames_jobs
 
 __author__ = 'joe vacovsky jr'
 setproctitle.setproctitle("jobsinfopage")
@@ -26,14 +27,27 @@ def flushall():
 
 @app.route('/queue', methods=["GET"])
 def queue():
-    if int(RMQNegotiator(message_queue="DemoQueue").queue_count()) < 19000:
-        result = {"success": True}
-        queue_demoqueue_jobs.queue_jobs()
-    else:
-        result = {
-            "success": False,
-            "message": "Sorry - we can't handle any more jobs right now.  Try when the queue is below 19000."
-        }
+    queue = request.args.get('queue') or "DemoQueue"
+    result = {}
+    if queue == "DemoQueue":
+        if int(RMQNegotiator(message_queue=queue).queue_count()) < 19000:
+            queue_demoqueue_jobs.queue_jobs()
+            result = {"success": True}    
+        else:
+            result = {
+                "success": False,
+                "message": "Sorry - we can't handle any more jobs right now.  Try when the queue is below 19000."
+            }
+
+    if queue == "BabyNamesPrecache":
+        if int(RMQNegotiator(message_queue=queue).queue_count()) < 1:
+            queue_babynames_jobs.queue_jobs()
+            result = {"success": True}
+        else:
+            result = {
+                "success": False,
+                "message": "Sorry - we can't handle any more jobs right now.  Try when the queue is empty."
+            }
     return jsonify(result)
 
 
@@ -41,23 +55,33 @@ def queue():
 def data():
     r = Redis()
     results = {}
+    queue = request.args.get('queue') or "DemoQueue"
     
-    results["requeued"] = len(r.Connection.smembers('REQUEUE:DEMO'))
-    results["running"] = len(r.Connection.smembers('RUNNING:DEMO'))
+    redis_bucket = ""
+    if queue == "DemoQueue":
+        redis_bucket = "DEMO"
+    if queue == "BabyNamesPrecache":
+        redis_bucket = "BABYNAMESCACHE"
+
+    rmq = RMQNegotiator(message_queue=queue)
+    results["requeued"] = len(r.Connection.smembers('REQUEUE:' + redis_bucket))
+    results["running"] = len(r.Connection.smembers('RUNNING:' + redis_bucket))
 
     last15_q = "SELECT Count(id) FROM failed WHERE timestamp > '%s'" % str(datetime.datetime.now() - datetime.timedelta(minutes=15))
     results["last_15m_fails"] = DemoHeartbeatDaemon().runQuery(last15_q)[0][0]
     
     try:
-        results["failed_count"] = int(r.Connection.get("FAILED:DEMO:COUNT").decode('utf8'))
+        results["failed_count"] = int(r.Connection.get("FAILED:" + redis_bucket + ":COUNT").decode('utf8'))
     except:
         results["failed_count"] = 0
     try:
-        results["completed"] = int(r.Connection.get("COMPLETED:DEMO:COUNT").decode('utf8'))
+        results["completed"] = int(r.Connection.get("COMPLETED:" + redis_bucket + ":COUNT").decode('utf8'))
     except:
         results["completed"] = 0
         
-    results["queue_count"] = int(RMQNegotiator(message_queue="DemoQueue").queue_count())
+    results["queue_count"] = int(rmq.queue_count())
+
+    results["queues"] = rmq.list_queues()
     return jsonify(results)
 
 

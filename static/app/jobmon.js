@@ -52,13 +52,22 @@
         $scope.completed = 0;
         $scope.queue_count = 0;
         $scope.last_15m_fails = 0;
+        $scope.queues = [];
+        $scope.queue_selected = "DemoQueue";
 
         $scope.addMessage = "";
-
         $scope.countDown = 50;
+
+        $scope.setSelectedQueue = function(queue) {
+            $scope.queue_selected = queue;
+            $scope.chartData = [[], [], [], [], [], []];
+            $scope.chartLabels = [];
+            $scope.checkData();
+        }
+        
         $scope.checkData = function() {
-            
-            $http.get(app.Root + 'data')
+            queryString = "?queue=" + $scope.queue_selected;
+            $http.get(app.Root + 'data' + queryString)
                 .success(function(data, status, headers, config) {
                     $scope.running = data.running;
                     $scope.queue_count = data.queue_count;
@@ -66,6 +75,7 @@
                     $scope.requeued = data.requeued;
                     $scope.completed = data.completed;
                     $scope.last_15m_fails = data.last_15m_fails;
+                    $scope.queues = data.queues;
 
                     if ($scope.queue_count >= 1 || $scope.countDown > 0) {
                         $scope.chartData[0].push(data.running);
@@ -98,7 +108,7 @@
         };
         
         $scope.queue_jobs = function(jobs) {
-            $http.get(app.Root + 'queue?count=' + jobs)
+            $http.get(app.Root + 'queue?queue=' + $scope.queue_selected)
                 .success(function(data, status, headers, config) {
                     if (data.message !== undefined) {
                         $scope.addMessage = data.message;                        

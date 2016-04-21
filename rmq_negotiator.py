@@ -5,6 +5,7 @@ import json
 from babynames_worker import BabyNamesWorker
 from demoqueue_worker import DemoQueueWorker
 import subprocess
+import requests
 
 
 class RMQNegotiator:
@@ -24,12 +25,19 @@ class RMQNegotiator:
         self.message_queue = message_queue
         
 
-    def list_queues(self):
+        #def list_queues(self):
+        """
         proc = subprocess.Popen("/usr/sbin/rabbitmqctl list_queues",
                                 shell=True,
                                 stdout=subprocess.PIPE)
         stdout_value = proc.communicate()[0]
         return stdout_value
+        """
+    def list_queues(self, port=15672, virtual_host=None):
+        url = 'http://%s:%s/api/queues/%s' % (self.host, port, virtual_host or '')
+        response = requests.get(url, auth=(self.user, self.password))
+        queues = [q['name'] for q in response.json()]
+        return queues
 
         
     def open_connection(self):
