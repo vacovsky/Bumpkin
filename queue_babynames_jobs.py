@@ -6,7 +6,7 @@ import json
 import threading
 
 
-def populate_redis_with_bn_totals(gender=None):
+def queue_jobs(gender=None):
     if gender is None:
         genders = ['M', 'F']
     elif gender == 'M':
