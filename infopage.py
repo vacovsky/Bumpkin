@@ -7,6 +7,7 @@ from Redis import Redis
 from daemon import DemoHeartbeatDaemon
 import queue_demoqueue_jobs
 import queue_babynames_jobs
+from kpi_roller import JobsRuntimeKPIRoller
 
 __author__ = 'joe vacovsky jr'
 setproctitle.setproctitle("jobsinfopage")
@@ -50,6 +51,17 @@ def queue():
             }
     return jsonify(result)
 
+
+
+@app.route('/kpis', methods=["GET"])
+def kpis():
+    bucket = "DEMO"
+    queue = request.args.get('bucket') or "DEMO"
+    j = JobsRuntimeKPIRoller()
+    j.export_runtime_kpi(bucket)
+    return jsonify(j.results())
+    
+    
 
 @app.route('/data', methods=["GET"])
 def data():
