@@ -12,7 +12,6 @@ class JobsRuntimeKPIRoller:
         self.bucket = bucket
         
 
-
     def __run_secs(self, id):
         start = "STARTTIME:" + str(self.bucket) + ":" + str(id)
         end = "ENDTIME:" + str(self.bucket) + ":" + str(id)
@@ -21,22 +20,31 @@ class JobsRuntimeKPIRoller:
         if rs is not None and re is not None:
             rs = rs.decode('utf8')
             re = re.decode('utf8')
+            self.timestamps[id] = {
+                "startTime": rs,
+                "endTime": re
+            }
         s = parser.parse(rs)
         e = parser.parse(re)
         return (e - s).seconds
         
 
     def __find_outliers(self):
+        print(self.timestamps)
         for id in self.ids:
             time = self.id_time_dict[id]
             if time > (self.mean + (self.std * 2)):
+                
                 self.rares.append({
                     "id": id,
-                    "seconds": time
+                    "seconds": time,
+                    #"startTime": self.timestamps[id]["startTime"],
+                    #"endTime": self.timestamps[id]["endTime"]
                 })
-
     
     def export_runtime_kpi(self):
+        self.rares = []
+        self.timestamps = {}
         ids = []
         times = []
 
