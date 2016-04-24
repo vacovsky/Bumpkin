@@ -30,7 +30,6 @@ class JobsRuntimeKPIRoller:
         
 
     def __find_outliers(self):
-        print(self.timestamps)
         for id in self.ids:
             time = self.id_time_dict[id]
             if time > (self.mean + (self.std * 2)):
