@@ -31,8 +31,8 @@ class BabyNamesWorker:
 
         
     def start(self):
-        print('starting job: ' + str(self.json_obj))
-        self.R.sadd(RUNNING, str(self.json_obj))
+        print('starting job: ' + self.json_obj)
+        self.R.sadd(RUNNING, self.json_obj)
         self.alive()
         return self.perform_task()
         
@@ -64,24 +64,19 @@ class BabyNamesWorker:
     def cleanup(self):
         self.counter = 0
 
-        self.data = {
-            "year": self.year,
-            "gender": self.gender,
-            "locale": self.locale
-        }
-
-        self.R.srem(RUNNING, self.data)
-        self.R.srem(REQUEUE, self.data)
-        self.R.sadd(COMPLETE, self.data)
+        
+        self.R.srem(RUNNING, self.json_obj)
+        self.R.srem(REQUEUE, self.json_obj)
+        self.R.sadd(COMPLETE, self.json_obj)
         c = self.R.get("COMPLETED:BABYNAMESCACHE:COUNT")
         if c is not None:
             self.R.set("COMPLETED:BABYNAMESCACHE:COUNT", int(c) + 1)
         else:
             self.R.set("COMPLETED:BABYNAMESCACHE:COUNT", 1)
-        if str(self.json_obj) in self.R.smembers(REQUEUE):
+        if self.json_obj in self.R.smembers(REQUEUE):
             #fc = int(self.R.Connection.get("failed_count").decode('utf8'))
             #self.R.Connection.set("failed_count", fc - 1)
-            self.R.srem(REQUEUE, self.data)
+            self.R.srem(REQUEUE, self.json_obj)
             
         
  
