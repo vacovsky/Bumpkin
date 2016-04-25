@@ -60,6 +60,7 @@ class JobsRuntimeKPIRoller:
         self.median = median(times)
         self.median_grouped = median_grouped(times)
         self.std = pstdev(times)
+        self.totalSeconds = sum(times)
         self.__find_outliers()
 
 
@@ -86,7 +87,8 @@ class JobsRuntimeKPIRoller:
             "standardDeviation": self.std,
             "rareCount": len(self.rares),
             "rarePercent": (len(self.rares) / self.total) * 100,
-            "rareTimeById": self.rares
+            "rareTimeById": self.rares,
+            "totalSeconds": self.totalSeconds
         }
 
 

@@ -36,6 +36,9 @@
         <div style="display:inline;">
           <button style="display:inline;margin-left:25px;margin-top:19px;" type="button" ng-click="queue_jobs(1000)" class="btn btn-warning">Add Jobs</button>
           <button style="display:inline;margin-left:25px;margin-top:19px;" type="button" ng-click="flushRedis()" class="btn btn-primary">Flush Redis</button>
+          <button style="display:inline;margin-left:25px;margin-top:19px;" type="button" ng-click="getKpiData()" class="btn btn-primary">
+            <span class="glyphicon glyphicon-th-list"></span>
+          </button>
         </div>
         <div style="display:inline;">
           <h4 style="display:inline;margin-right:15px;margin-top:27px;" class="pull-right "> Fail: {[ failed_count ]}% </h4>
@@ -46,7 +49,20 @@
         </div>
       </div>
       <div id="chart" style="height:75%;width:85%;align:center;margin-left:auto;margin-right:auto">
+        <div ng-show="showKpis">
+          <ul>
+            <li>Total Time (Seconds): {[ kpiData.totalSeconds ]}</li>
+            <li>Total Jobs: {[ kpiData.total ]}</li>
+            <li>Max (seconds): {[ kpiData.max ]}</li>
+            <li>Mean (seconds): {[ kpiData.mean ]}</li>
+            <li>Median (seconds): {[ kpiData.median ]}</li>
+            <li>Rare Count: {[ kpiData.rareCount ]}</li>
+            <li>Rare %: {[ kpiData.rarePercent ]}</li>
+            <li>Standard Deviation (seconds): {[ kpiData.standardDeviation ]}</li>
+          </ul>
+        </div>
         <canvas
+           ng-show="showChart"
            id="rightbox"
            class="chart chart-line chart-xl ng-isolate-scope"
            chart-legend="true"

@@ -28,12 +28,23 @@
             //scaleSteps: 40,
             responsive: true,
             //maintainAspectRatio: true,
-            
         };
+
+        $scope.showChart = true;
+        $scope.showKpis = false;
+        $scope.kpiData = {};
+        $scope.getKpiData = function() {
+            $http.get(app.Root + "kpis")
+                .success(function(data, status, headers, config) {
+                    $scope.kpiData = data;
+                });
+            $scope.showKpis = !$scope.showKpis;
+            //$scope.showChart = !$scope.showChart;
+        }
 
         //add new array to add another data set to the chart
         $scope.chartData = [
-            [],[],[],[],[],[]
+            [0],[0],[0],[0],[0],[0]
         ];
         
         $scope.chartLabels = [];
@@ -60,8 +71,8 @@
 
         $scope.setSelectedQueue = function(queue) {
             $scope.queue_selected = queue;
-            $scope.chartData = [[], [], [], [], [], []];
-            $scope.chartLabels = [];
+            $scope.chartData = [[0], [0], [0], [0], [0], [0]];
+            $scope.chartLabels = [0];
             $scope.countDown = 50;
             $scope.checkData();
         }
@@ -88,7 +99,7 @@
                         
                         $scope.chartLabels.push(moment().format("HH:mm:ss"));
 
-                        if ($scope.queue_count == 0) {
+                        if ($scope.queue_count == 0 && $scope.countDown > 0) {
                             $scope.countDown = $scope.countDown - 1;
                         }
 
@@ -103,7 +114,8 @@
                         }
                     }
                 }).error(function(data, status, headers, config) {});
-            if ($scope.countDown == 0 && data.queue_count !== 0){
+            
+            if ($scope.countDown == 0 && data.queue_count != 0){
                 $scope.countDown = 50;
             }
         };
