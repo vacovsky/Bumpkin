@@ -64,7 +64,7 @@ class BabyNamesWorker:
         self.counter = 0
         message = {'flash_color': 'yellow',
                    'base_color': 'purple',
-                   'interval': 0.03,
+                   'interval': 0.05,
                    'count': 1
                    }
         Redis().publish("BlinkBlock", message)

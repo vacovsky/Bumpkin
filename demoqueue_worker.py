@@ -66,7 +66,7 @@ class DemoQueueWorker:
         self.counter = 0
         message = {'flash_color': 'green',
                    'base_color': 'teal',
-                   'interval': 0.1,
+                   'interval': 0.3,
                    'count': 1
                    }
         Redis().publish("BlinkBlock", message)
