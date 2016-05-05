@@ -13,23 +13,23 @@ REQUEUE = "REQUEUE:DEMO"
 '''
 This class executes jobs as they appear in the queue of jobs to execute.
 '''
+
+
 class DemoQueueWorker:
     R = None
     total = 0
     counter = 0
     id = None
-    
+
     def __init__(self, id=-1):
         self.id = id
         self.R = Redis().Connection
 
-        
     def start(self):
         print('starting job id: ' + str(self.id))
         self.R.sadd(RUNNING, self.id)
         self.alive()
         return self.perform_task()
-        
 
     def alive(self):
         Redis().get_or_set("STARTTIME:DEMO:" + str(self.id), datetime.now())
@@ -45,7 +45,7 @@ class DemoQueueWorker:
                 }
             ),
         )
-        
+
     def perform_task(self):
         while self.total <= 21:
             if self.counter > 6:
@@ -58,13 +58,18 @@ class DemoQueueWorker:
             time.sleep(randint(1, 10))
             self.total += add_me
             self.alive()
-            
+
         self.cleanup()
         return True
 
-            
     def cleanup(self):
         self.counter = 0
+        message = {'flash_color': 'green',
+                   'base_color': 'teal',
+                   'interval': 0.1,
+                   'count': 1
+                   }
+        Redis().publish("BlinkBlock", message)
         self.R.srem(RUNNING, self.id)
         self.R.sadd(COMPLETE, self.id)
         c = self.R.get("COMPLETED:DEMO:COUNT")
@@ -76,7 +81,6 @@ class DemoQueueWorker:
             self.R.srem(REQUEUE, self.id)
             self.R.set("COMPLETED:DEMO:COUNT", int(c) + 1)
         self.R.set("ENDTIME:DEMO:" + str(self.id), datetime.now())
- 
+
 if __name__ == '__main__':
     DemoWorker().start()
-    

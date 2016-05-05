@@ -49,31 +49,47 @@
         </div>
       </div>
       <div id="chart" style="height:75%;width:85%;align:center;margin-left:auto;margin-right:auto">
-        <div ng-show="showKpis">
-          <ul>
-            <li>Total Time (Seconds): {[ kpiData.totalSeconds ]}</li>
-            <li>Total Jobs: {[ kpiData.total ]}</li>
-            <li>Max (seconds): {[ kpiData.max ]}</li>
-            <li>Mean (seconds): {[ kpiData.mean ]}</li>
-            <li>Median (seconds): {[ kpiData.median ]}</li>
-            <li>Rare Count: {[ kpiData.rareCount ]}</li>
-            <li>Rare %: {[ kpiData.rarePercent ]}</li>
-            <li>Standard Deviation (seconds): {[ kpiData.standardDeviation ]}</li>
-          </ul>
+
+        <div class="row">
+          <div class="col-xs-5">
+             <canvas
+               ng-show="showChart"
+               id="rightbox"
+               class="chart chart-line chart-xl ng-isolate-scope"
+               chart-legend="true"
+               chart-data="chartData"
+               chart-options="options"
+               chart-labels="chartLabels"
+               chart-series="chartSeries">
+            </canvas>
+          </div>
+          <div class="col-xs-5">
+           SOMETHING GOES HERE
+          </div>
         </div>
-        <canvas
-           ng-show="showChart"
-           id="rightbox"
-           class="chart chart-line chart-xl ng-isolate-scope"
-           chart-legend="true"
-           chart-data="chartData"
-           chart-options="options"
-           chart-labels="chartLabels"
-           chart-series="chartSeries">
-        </canvas>
+        <div class="row">
+          <div class="col-xs-5">
+            SOMETHING GOES HERE
+          </div>
+          <div class="col-xs-5">
+            <div ng-show="showKpis">
+             <ul>
+               <li>Total Time (Seconds): {[ kpiData.totalSeconds ]}</li>
+               <li>Total Jobs: {[ kpiData.total ]}</li>
+               <li>Max (seconds): {[ kpiData.max ]}</li>
+               <li>Mean (seconds): {[ kpiData.mean ]}</li>
+               <li>Median (seconds): {[ kpiData.median ]}</li>
+               <li>Rare Count: {[ kpiData.rareCount ]}</li>
+               <li>Rare %: {[ kpiData.rarePercent ]}</li>
+               <li>Standard Deviation (seconds): {[ kpiData.standardDeviation ]}</li>
+             </ul>
+           </div></div>
+        </div>
         <h5>
           <center>repo for this junker can be found <a href="https://github.com/vacoj/Bumpkin"> here</a>.</center>
       </h5>
+
+
       </div>
     </div>
   </body>
