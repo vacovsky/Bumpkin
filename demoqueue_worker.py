@@ -64,12 +64,14 @@ class DemoQueueWorker:
 
     def cleanup(self):
         self.counter = 0
+        """
         message = {'flash_color': 'green',
                    'base_color': 'teal',
                    'interval': 0.3,
                    'count': 1
                    }
         Redis().publish("BlinkBlock", message)
+        """
         self.R.srem(RUNNING, self.id)
         self.R.sadd(COMPLETE, self.id)
         c = self.R.get("COMPLETED:DEMO:COUNT")

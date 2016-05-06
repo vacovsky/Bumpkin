@@ -62,12 +62,12 @@ class BabyNamesWorker:
 
     def cleanup(self):
         self.counter = 0
-        message = {'flash_color': 'yellow',
-                   'base_color': 'purple',
-                   'interval': 0.05,
-                   'count': 1
-                   }
-        Redis().publish("BlinkBlock", message)
+        """message = {'flash_color': 'yellow',
+                                           'base_color': 'purple',
+                                           'interval': 0.05,
+                                           'count': 1
+                                           }
+        Redis().publish("BlinkBlock", message)"""
         self.R.srem(RUNNING, self.json_obj)
         self.R.srem(REQUEUE, self.json_obj)
         self.R.sadd(COMPLETE, self.json_obj)
