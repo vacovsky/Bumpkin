@@ -1,8 +1,5 @@
 
-import CONFIG
-from datetime import datetime
 import rmq_negotiator
-import json
 import threading
 
 
@@ -11,6 +8,7 @@ def queue_jobs(gender=None):
         genders = ['M', 'F']
     elif gender == 'M':
         genders = ['M']
+
     else:
         genders = ['F']
 
