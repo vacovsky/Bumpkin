@@ -77,8 +77,8 @@ class BabyNamesWorker:
         else:
             self.R.set("COMPLETED:BABYNAMESCACHE:COUNT", 1)
         if self.json_obj in self.R.smembers(REQUEUE):
-            #fc = int(self.R.Connection.get("failed_count").decode('utf8'))
-            #self.R.Connection.set("failed_count", fc - 1)
+            # fc = int(self.R.Connection.get("failed_count").decode('utf8'))
+            # self.R.Connection.set("failed_count", fc - 1)
             self.R.srem(REQUEUE, self.json_obj)
 
 

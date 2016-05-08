@@ -2,15 +2,14 @@ from Redis import Redis
 from statistics import pstdev, mean, median, median_grouped
 from dateutil import parser
 
+
 class JobsRuntimeKPIRoller:
     rares = []
     long_running = []
-    
-    
+
     def __init__(self, bucket):
         self.R = Redis().Connection
         self.bucket = bucket
-        
 
     def __run_secs(self, id):
         start = "STARTTIME:" + str(self.bucket) + ":" + str(id)
@@ -27,20 +26,19 @@ class JobsRuntimeKPIRoller:
         s = parser.parse(rs)
         e = parser.parse(re)
         return (e - s).seconds
-        
 
     def __find_outliers(self):
         for id in self.ids:
             time = self.id_time_dict[id]
             if time > (self.mean + (self.std * 2)):
-                
+
                 self.rares.append({
                     "id": id,
                     "seconds": time,
-                    #"startTime": self.timestamps[id]["startTime"],
-                    #"endTime": self.timestamps[id]["endTime"]
+                    # "startTime": self.timestamps[id]["startTime"],
+                    # "endTime": self.timestamps[id]["endTime"]
                 })
-    
+
     def export_runtime_kpi(self):
         self.rares = []
         self.timestamps = {}
@@ -48,7 +46,7 @@ class JobsRuntimeKPIRoller:
         times = []
 
         for v in self.R.smembers("COMPLETE:" + self.bucket):
-            times.append(self.__run_secs(v.decode('utf8'))) 
+            times.append(self.__run_secs(v.decode('utf8')))
             ids.append(int(v.decode('utf8')))
 
         self.id_time_dict = dict(zip(ids, times))
@@ -63,7 +61,6 @@ class JobsRuntimeKPIRoller:
         self.totalSeconds = sum(times)
         self.__find_outliers()
 
-
     def print_results(self):
         print("Type: " + self.bucket)
         print('Max: ' + str(self.max_run))
@@ -72,11 +69,10 @@ class JobsRuntimeKPIRoller:
         print('Median: ' + str(self.median))
         print('Median grouped: ' + str(self.median_grouped))
         print('Standard Deviation: ' + str(self.std))
-        #print(self.id_time_dict)
+        # print(self.id_time_dict)
         print('Rares: ' + str(len(self.rares)))
-        print('Rare %: ' +  str((len(self.rares) / self.total) * 100))
+        print('Rare %: ' + str((len(self.rares) / self.total) * 100))
 
-        
     def results(self):
         return {
             "total": self.total,

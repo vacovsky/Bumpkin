@@ -43,7 +43,8 @@ def get_total_gender_for_year(year, gender, locale):
         sqlStr += " WHERE Year=%s AND Gender='%s';" % (year, gender)
     else:
         sqlStr += " statenames "
-        sqlStr += " WHERE year=%s AND Gender='%s' AND State='%s';" % (year, gender, locale)
+        sqlStr += " WHERE year=%s AND Gender='%s' AND State='%s';" % (
+            year, gender, locale)
     result = runQuery(query=sqlStr)[0][0]
     if result is None:
         result = 0
@@ -56,7 +57,8 @@ def get_name_data_in_region(name, gender, locale, first_year=1950):
         cache_key = gender + ':' + locale + ':' + str(y)
         total_gender_for_year = cachemanager.get_or_set(cache_key)
         if total_gender_for_year is None:
-            total_gender_for_year = int(get_total_gender_for_year(y, gender, locale))
+            total_gender_for_year = int(
+                get_total_gender_for_year(y, gender, locale))
             cachemanager.get_or_set(cache_key, total_gender_for_year)
         year_totals[y] = int(total_gender_for_year)
     return get_name_data(name, gender, locale, year_totals, first_year)
@@ -66,11 +68,10 @@ def prepopulate_cache(year, gender, locale):
     cache_key = gender + ':' + locale + ':' + str(year)
     total_gender_for_year = cachemanager.get_or_set(cache_key)
     if total_gender_for_year is None:
-        total_gender_for_year = int(get_total_gender_for_year(year, gender, locale))
+        total_gender_for_year = int(
+            get_total_gender_for_year(year, gender, locale))
         cachemanager.get_or_set(cache_key, total_gender_for_year)
 
-    #print('Processing, %s : %s: %s please wait...' % (job['gender'], job['locale'], job['year']))
+    # print('Processing, %s : %s: %s please wait...' % (job['gender'], job['locale'], job['year']))
     print(cache_key, total_gender_for_year)
     return True
-
-    

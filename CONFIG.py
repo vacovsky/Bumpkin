@@ -14,5 +14,3 @@ DB = '/var/www/Bumpkin/log.sqlite'
 if socket.gethostname() != "octo-pi":
     DB = 'log.sqlite3'
     DBPATH = "/mnt/sd/Projects/Angular/babynames/database.sqlite"
-    
-    

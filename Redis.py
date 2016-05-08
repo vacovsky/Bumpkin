@@ -2,20 +2,19 @@ import redis
 import time
 import CONFIG
 
+
 class Redis:
-    
+
     Connection = None
     PubSub = None
-    
-    def  __init__(self):
+
+    def __init__(self):
         self.create_connection()
         self.create_pubsub()
 
-       
     def create_pubsub(self):
         self.PubSub = self.Connection.pubsub()
 
-        
     def create_connection(self, connection=CONFIG.REDDIS_CONN):
         self.Connection = redis.StrictRedis(
             host=connection,
@@ -23,19 +22,15 @@ class Redis:
             db=0,
             password=None)
 
-        
     def subscribe(self, channel):
         self.PubSub.subscribe(channel)
 
-    
     def publish(self, channel, message):
         self.Connection.publish(channel, message)
 
-    
     def get_message(self):
         self.PubSub.get_message()
 
-        
     def get_or_set(self, key, obj=None):
         v = self.Connection.get(key)
         if v is not None:
@@ -50,9 +45,8 @@ if __name__ == '__main__':
     r.subscribe('test')
     for message in r.PubSub.listen():
         print(message)
-    
-    
-    
+
+
 '''
 for num in range(0, 100):
     r.sadd(RUNNING, num)
