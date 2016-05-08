@@ -1,5 +1,4 @@
 import redis
-import time
 import CONFIG
 
 
@@ -45,20 +44,3 @@ if __name__ == '__main__':
     r.subscribe('test')
     for message in r.PubSub.listen():
         print(message)
-
-
-'''
-for num in range(0, 100):
-    r.sadd(RUNNING, num)
-
-for x in range(20, 25):
-    r.sadd(FAILED, x)
-
-# sets commands that matter for my needs
-# sinter, sadd, srem, sdiff
-
-
-
-print(r.sinter(RUNNING, FAILED))
-print(r.sdiff(RUNNING, FAILED))
-'''
